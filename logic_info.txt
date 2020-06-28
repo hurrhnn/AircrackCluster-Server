@@ -1,0 +1,18 @@
+1. 서버 소캣 갯수 받아서 열기. args[0]에 받아서.
+2. 연결된 클라이언트가 벤치 결과 보냄.
+(BENCH OK,5432)
+3. 각 클라이언트에게 BENCH_RESULT OK 보낼깨오...
+
+BENCH_RESULT OK 다 보내면 다음 명령 실행:
+
+4. FILE_BYTE OK 받으면 바이트수 보내기.
+5. FILE_READY OK 받으면 cap파일 보내야지.
+6. FILE_RECV OK 받으면 통과
+6-1. FILE_RECV FAIL 받으면 RETRY보내고 3번 RETRY 보냇는데 ㅗ이면 DROP.
+
+FILE_RECV 결과 다나오면 다음 명령 실행:
+
+7. INF_READY OK 받으면 ESSID,BSSID스트링 보내기.
+8. INF_RECV OK 다 받으면 다음 단계 진행:
+
+===============
