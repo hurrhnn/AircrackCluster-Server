@@ -59,13 +59,12 @@ public class SendCapturedFileThread implements Runnable {
 
         int readBytes;
         byte[] buffer = new byte[4096];
-        while ((readBytes = fileInputStream.read(buffer)) > 0) {
+        while ((readBytes = fileInputStream.read(buffer)) != -1) {
             socketOutputStream.write(buffer, 0, readBytes);
             totalReadBytes += readBytes;
             System.out.print("In progress: " + totalReadBytes + "/"
             + fileSize + " Byte(s) ("
             + (totalReadBytes * 100 / fileSize) + " %)\r");
         }
-        //socketOutputStream.close();
     }
 }
