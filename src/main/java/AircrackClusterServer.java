@@ -9,7 +9,6 @@ public class AircrackClusterServer {
     static String ESSID;
 
     static Socket[] sockets = null;
-    static Thread[] runningThreads = null;
     static int[] clientBenchResult = null;
 
     // args[0]: peer count
@@ -24,7 +23,7 @@ public class AircrackClusterServer {
         ServerSocket serverSocket = new ServerSocket(6974);
 
         sockets = new Socket[PEER_COUNT];
-        runningThreads = new Thread[PEER_COUNT];
+        Thread[] runningThreads  = new Thread[PEER_COUNT];
 
         for (int i = 0; i < PEER_COUNT; i++) {
             Runnable runnable = new ClientInitThread(serverSocket, i);
@@ -32,7 +31,9 @@ public class AircrackClusterServer {
             runningThreads[i].start();
         }
 
-        WaitingThreadForNextCommand();
+        WaitingThreadForNextCommand(runningThreads);
+        runningThreads = new Thread[PEER_COUNT];
+
         System.out.println("Clients init Completed!");
 
         clientBenchResult = new int[PEER_COUNT];
@@ -42,7 +43,9 @@ public class AircrackClusterServer {
             runningThreads[i].start();
         }
 
-        WaitingThreadForNextCommand();
+        WaitingThreadForNextCommand(runningThreads);
+        runningThreads = new Thread[PEER_COUNT];
+
         System.out.println("Successfully Received bench result from all clients!");
 
         File capturedFile = new File((args[4]));
@@ -52,19 +55,23 @@ public class AircrackClusterServer {
             runningThreads[i].start();
         }
 
-        WaitingThreadForNextCommand();
+        WaitingThreadForNextCommand(runningThreads);
+        runningThreads = new Thread[PEER_COUNT];
+
         System.out.println("Successfully sent captured file to all clients!");
 
-        /*
         for (int i = 0; i < PEER_COUNT; i++) {
             Runnable runnable = new SendArgsInfoThread(BSSID, ESSID, i);
             runningThreads[i] = new Thread(runnable);
             runningThreads[i].start();
         }
 
-        WaitingThreadForNextCommand();
+        WaitingThreadForNextCommand(runningThreads);
+        runningThreads = new Thread[PEER_COUNT];
+
         System.out.println("Successfully sent AP information to all clients!");
-        System.exit(0); */
+
+
     }
 
     public static void argsCheck(String[] args) {
@@ -123,15 +130,12 @@ public class AircrackClusterServer {
         }
     }
 
-    static public void WaitingThreadForNextCommand() {
+    static public void WaitingThreadForNextCommand(Thread[] runningThreads) {
         while (true) {
             int finishedThread = 0;
             for (int i = 0; i < PEER_COUNT; i++)
                 if (!runningThreads[i].isAlive()) finishedThread++;
-            if (finishedThread == PEER_COUNT) {
-                runningThreads = new Thread[PEER_COUNT];
-                break;
-            }
+            if (finishedThread == PEER_COUNT) break;
         }
     }
 }
