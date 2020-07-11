@@ -15,7 +15,6 @@ public class ClientInitThread implements Runnable {
 
     public void run()
     {
-        System.out.println("Server Socket Started!\n");
         try {
             Socket socket = serverSocket.accept();
             AircrackClusterServer.sockets[i] = socket;
