@@ -10,6 +10,9 @@ public class AircrackClusterServer {
 
     static Socket[] sockets = null;
     static int[] clientBenchResult = null;
+    static BufferedReader dictionaryFileReader = null;
+
+    static boolean[][] clientState = null;
 
     // args[0]: peer count
     // args[1]: bssid
@@ -20,10 +23,13 @@ public class AircrackClusterServer {
     public static void main(String[] args) throws IOException {
 
         argsCheck(args);
+        dictionaryFileReader = new BufferedReader(new FileReader(new File(args[3])));
+
+        System.out.println("Server Socket Started!\n");
         ServerSocket serverSocket = new ServerSocket(6974);
 
         sockets = new Socket[PEER_COUNT];
-        Thread[] runningThreads  = new Thread[PEER_COUNT];
+        Thread[] runningThreads = new Thread[PEER_COUNT];
 
         for (int i = 0; i < PEER_COUNT; i++) {
             Runnable runnable = new ClientInitThread(serverSocket, i);
@@ -71,10 +77,26 @@ public class AircrackClusterServer {
 
         System.out.println("Successfully sent AP information to all clients!");
 
+        initClientState();
+        for (int i = 0; i < PEER_COUNT; i++) {
+            Runnable runnable = new CrackPasswordThread(i);
+            runningThreads[i] = new Thread(runnable);
+            runningThreads[i].setName(String.format("Client%02d", i + 1));
+            runningThreads[i].start();
+        }
 
+        int clientAliveCount;
+        do {
+            clientAliveCount = PEER_COUNT;
+            for (int i = 0; i < PEER_COUNT; i++) {
+                if (!clientState[i][0]) {
+                    if (clientState[i][1]) clientState[i][2] = true;
+                } else clientAliveCount--;
+            }
+        } while (clientAliveCount != 0);
     }
 
-    public static void argsCheck(String[] args) {
+    private static void argsCheck(String[] args) {
         if (args.length != 0) {
             try {
                 PEER_COUNT = Integer.parseInt(args[0]);
@@ -127,6 +149,16 @@ public class AircrackClusterServer {
 
         } else {
             System.out.println("Peer Count needed. Exit.");
+        }
+    }
+
+    private static void initClientState() {
+        clientState = new boolean[PEER_COUNT][3];
+        for(int i = 0; i < PEER_COUNT; i++)
+        {
+            clientState[i][0] = false;
+            clientState[i][1] = true;
+            clientState[i][2] = false;
         }
     }
 
