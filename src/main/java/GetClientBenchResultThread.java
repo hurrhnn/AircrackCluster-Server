@@ -18,13 +18,12 @@ public class GetClientBenchResultThread implements Runnable {
 
             String line = socketReader.readLine();
             int benchResult;
-
-            System.out.println(line);
             if(line.contains("BENCH OK"))
             {
                 try {
                     benchResult = Integer.parseInt(line.replace("BENCH OK,", ""));
                     AircrackClusterServer.clientBenchResult[i] = benchResult;
+                    System.out.println("Client " + (i + 1) + ": " + benchResult + " k/s");
                     printWriter.println("BENCH_RESULT OK");
                 }catch (NumberFormatException ignored) {
                     printWriter.println("BENCH_RESULT FAIL");

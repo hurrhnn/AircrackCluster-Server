@@ -20,6 +20,8 @@ public class SendArgsInfoThread implements Runnable {
 
             String line = socketReader.readLine();
             if (line.contains("INF_READY OK")) printWriter.println(BSSID + "," + ESSID);
+
+            System.out.println("Client " + (i + 1) + ": sent AP information Successfully!");
         } catch (IOException ignored) {}
     }
 }

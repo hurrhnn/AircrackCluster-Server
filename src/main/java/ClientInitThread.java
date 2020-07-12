@@ -18,7 +18,7 @@ public class ClientInitThread implements Runnable {
         try {
             Socket socket = serverSocket.accept();
             AircrackClusterServer.sockets[i] = socket;
-            System.out.println(i + ": Socket Connected!\n");
+            System.out.println((i + 1) + ": Socket Connected!");
         }catch (IOException ignored) {}
     }
 }

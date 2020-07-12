@@ -41,6 +41,7 @@ public class AircrackClusterServer {
         runningThreads = new Thread[PEER_COUNT];
 
         System.out.println("Clients init Completed!");
+        System.out.println("Ready for clients bench result!\n");
 
         clientBenchResult = new int[PEER_COUNT];
         for (int i = 0; i < PEER_COUNT; i++) {
@@ -52,7 +53,8 @@ public class AircrackClusterServer {
         WaitingThreadForNextCommand(runningThreads);
         runningThreads = new Thread[PEER_COUNT];
 
-        System.out.println("Successfully Received bench result from all clients!");
+        System.out.println("\nSuccessfully Received bench result from all clients!");
+        System.out.println("\nReady for sending a captured file to all clients\n");
 
         File capturedFile = new File((args[4]));
         for (int i = 0; i < PEER_COUNT; i++) {
@@ -64,7 +66,8 @@ public class AircrackClusterServer {
         WaitingThreadForNextCommand(runningThreads);
         runningThreads = new Thread[PEER_COUNT];
 
-        System.out.println("Successfully sent captured file to all clients!");
+        System.out.println("\nSuccessfully sent a captured file to all clients!");
+        System.out.println("\nReady for sent AP information to all clients");
 
         for (int i = 0; i < PEER_COUNT; i++) {
             Runnable runnable = new SendArgsInfoThread(BSSID, ESSID, i);
@@ -81,7 +84,6 @@ public class AircrackClusterServer {
         for (int i = 0; i < PEER_COUNT; i++) {
             Runnable runnable = new CrackPasswordThread(i);
             runningThreads[i] = new Thread(runnable);
-            runningThreads[i].setName(String.format("Client%02d", i + 1));
             runningThreads[i].start();
         }
 
@@ -153,12 +155,13 @@ public class AircrackClusterServer {
     }
 
     private static void initClientState() {
-        clientState = new boolean[PEER_COUNT][3];
+        clientState = new boolean[PEER_COUNT][4];
         for(int i = 0; i < PEER_COUNT; i++)
         {
             clientState[i][0] = false;
             clientState[i][1] = true;
             clientState[i][2] = false;
+            clientState[i][3] = false;
         }
     }
 

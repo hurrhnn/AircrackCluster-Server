@@ -47,13 +47,12 @@ public class SendCapturedFileThread implements Runnable {
                         }
                     }
                 }
+                System.out.println("Sent a packet file to " + "Client " + (i + 1) + " Successfully!");
             }
         }catch (IOException ignored){}
     }
 
     public void sendCapturedFile(Socket socket, File capturedFile) throws IOException {
-        long totalReadBytes = 0;
-        long fileSize = capturedFile.length();
         FileInputStream fileInputStream = new FileInputStream(capturedFile);
         OutputStream socketOutputStream = socket.getOutputStream();
 
@@ -61,10 +60,6 @@ public class SendCapturedFileThread implements Runnable {
         byte[] buffer = new byte[4096];
         while ((readBytes = fileInputStream.read(buffer)) != -1) {
             socketOutputStream.write(buffer, 0, readBytes);
-            totalReadBytes += readBytes;
-            System.out.print("In progress: " + totalReadBytes + "/"
-            + fileSize + " Byte(s) ("
-            + (totalReadBytes * 100 / fileSize) + " %)\r");
         }
     }
 }
