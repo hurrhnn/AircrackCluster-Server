@@ -67,7 +67,7 @@ public class AircrackClusterServer {
         runningThreads = new Thread[PEER_COUNT];
 
         System.out.println("\nSuccessfully sent a captured file to all clients!");
-        System.out.println("\nReady for sent AP information to all clients");
+        System.out.println("\nReady for sent AP information to all clients\n");
 
         for (int i = 0; i < PEER_COUNT; i++) {
             Runnable runnable = new SendArgsInfoThread(BSSID, ESSID, i);
@@ -78,7 +78,7 @@ public class AircrackClusterServer {
         WaitingThreadForNextCommand(runningThreads);
         runningThreads = new Thread[PEER_COUNT];
 
-        System.out.println("Successfully sent AP information to all clients!");
+        System.out.println("\nSuccessfully sent AP information to all clients!\n");
 
         initClientState();
         for (int i = 0; i < PEER_COUNT; i++) {
