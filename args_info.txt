@@ -1,4 +1,0 @@
-bss 00:07:89:56:3a:56
-ess olleh_WiFi_3A53
-dict Password.txt
-cap olleh_WiFi_3A53.cap
