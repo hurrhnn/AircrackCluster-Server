@@ -1,3 +1,5 @@
+Client repo: [https://github.com/KokoseiJ/AircrackCluster-Client](https://github.com/KokoseiJ/AircrackCluster-Client)
+
 # AircrackCluster-Server
 AircrackCluster helps you crack passwords faster.
 ​
