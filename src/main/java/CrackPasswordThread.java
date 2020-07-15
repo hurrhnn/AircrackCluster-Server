@@ -29,7 +29,7 @@ public class CrackPasswordThread implements Runnable {
                 InputStream input = AircrackClusterServer.sockets[i].getInputStream();
                 socketReader = new BufferedReader(new InputStreamReader(input));
                 printWriter = new PrintWriter(AircrackClusterServer.sockets[i].getOutputStream(), true);
-                bufferedWriter = new BufferedWriter(new OutputStreamWriter(AircrackClusterServer.sockets[i].getOutputStream()), 4096);
+                bufferedWriter = new BufferedWriter(new OutputStreamWriter(AircrackClusterServer.sockets[i].getOutputStream()), 8192);
 
                 if(socketReader.readLine().equals("DICT_SIZE OK")) {
                     printWriter.println(AircrackClusterServer.clientBenchResult[i] * THRESHOLD);
