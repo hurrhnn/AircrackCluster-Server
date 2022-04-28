@@ -26,7 +26,7 @@ public class AircrackClusterServer {
         dictionaryFileReader = new BufferedReader(new FileReader(new File(args[3])));
 
         System.out.println("Server Socket Started!\n");
-        ServerSocket serverSocket = new ServerSocket(6974);
+        ServerSocket serverSocket = new ServerSocket(3845);
 
         sockets = new Socket[PEER_COUNT];
         Thread[] runningThreads = new Thread[PEER_COUNT];
